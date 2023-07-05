@@ -1,14 +1,14 @@
-const getData = async () => {
-  const res = await fetch(process.env.DEV_ENV_URL + "/api/users");
+"use client";
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-};
+import QrCode from "../components/QrCode";
 
-export default async function Home() {
-  const data = await getData();
-
-  return <div>Welcome {data.name}</div>;
+export default function Home() {
+  return (
+    <div>
+      <h1>Welcome to Users Homepage</h1>
+      <label>Enter song: </label>
+      <input className=" border-black" type="text" id="song"></input>
+      <QrCode />
+    </div>
+  );
 }
