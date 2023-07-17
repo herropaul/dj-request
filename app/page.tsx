@@ -7,16 +7,37 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { SearchIcon, CloseIcon } from "@chakra-ui/icons";
+import { Formik, Field, Form } from "formik";
+import { SearchIcon } from "@chakra-ui/icons";
 
 import QrCode from "../components/QrCode";
 
 export default function Home() {
   return (
-    <div className=" flex flex-col justify-center items-center h-screen text-white bg-slate-900">
-      <h1>Welcome to Users Homepage</h1>
-      <form>
-        <FormControl className=" flex flex-row">
+    <div className=" flex flex-col justify-center items-center h-screen bg-slate-900">
+      <h1 className="text-white">Welcome to Users Homepage</h1>
+      <Formik
+        initialValues={{ song: "" }}
+        onSubmit={() => {
+          alert("Submitted song");
+        }}
+      >
+        <Form>
+          <Field
+            className=" rounded-md bg-slate-900 border text-white border-b-white"
+            name="song"
+            type="text"
+          />
+          <Button
+            mx={1}
+            colorScheme="green"
+            leftIcon={<SearchIcon />}
+            type="submit"
+          >
+            Search
+          </Button>
+        </Form>
+        {/* <FormControl className=" flex flex-row">
           <InputGroup>
             <Input
               color="white"
@@ -36,9 +57,8 @@ export default function Home() {
           >
             Search
           </Button>
-        </FormControl>
-        {/* <QrCode /> */}
-      </form>
+        </FormControl> */}
+      </Formik>
     </div>
   );
 }
