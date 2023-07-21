@@ -8,19 +8,29 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
+import * as Yup from "yup";
 import { SearchIcon } from "@chakra-ui/icons";
 
 import QrCode from "../components/QrCode";
 
+interface FormValues {
+  song: string;
+}
+
 export default function Home() {
+  const initialValues: FormValues = { song: "" };
+
   return (
     <div className=" flex flex-col justify-center items-center h-screen bg-slate-900">
       <h1 className="text-white">Welcome to Users Homepage</h1>
       <Formik
-        initialValues={{ song: "" }}
+        initialValues={initialValues}
         onSubmit={() => {
           alert("Submitted song");
         }}
+        validationSchema={Yup.object({
+          song: Yup.string().required("Required"),
+        })}
       >
         <Form>
           <Field
@@ -34,7 +44,7 @@ export default function Home() {
             leftIcon={<SearchIcon />}
             type="submit"
           >
-            Search
+            Submit
           </Button>
         </Form>
         {/* <FormControl className=" flex flex-row">
