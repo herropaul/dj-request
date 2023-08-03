@@ -20,29 +20,27 @@ interface FormValues {
   song: string;
 }
 
-interface AccessTokenResponse {
-  access_token: string;
-  token_type: string;
-  expires_in: number;
+interface ArtistResponse {
+  artist: string;
 }
 
 export default function Home() {
   const initialValues: FormValues = { song: "" };
-  const [tokenData, setTokenData] = useState<AccessTokenResponse | null>(null);
+  const [artist, setArtist] = useState<ArtistResponse | null>(null);
 
   useEffect(() => {
     axios
-      .post("/api/accessToken")
+      .get("/api/getArtists")
       .then((response) => {
-        console.log("Response: " + JSON.stringify(response.data));
-        setTokenData(response.data);
+        console.log("Response: " + JSON.stringify(response.data.name));
+        //setArtist(response.data);
       })
       .catch((err) => {
         console.log("Error: ", err);
       });
   }, []);
 
-  if (!tokenData) return <div>Failed to get data...</div>;
+  //if (!artist) return <div>Failed to get data...</div>;
 
   return (
     <div className=" flex flex-col justify-center items-center h-screen bg-slate-900">
