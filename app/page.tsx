@@ -1,12 +1,5 @@
 "use client";
-import {
-  Input,
-  Flex,
-  FormControl,
-  Button,
-  InputGroup,
-  InputRightElement,
-} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -15,29 +8,39 @@ import QrCode from "../components/QrCode";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { GetStaticProps } from "next";
+import { debounce } from "lodash";
 
 interface FormValues {
   song: string;
 }
 
-interface ArtistResponse {
-  artist: string;
+interface Track {
+  name: string;
+  artists: { name: string }[];
 }
 
 export default function Home() {
   const initialValues: FormValues = { song: "" };
-  const [artist, setArtist] = useState<ArtistResponse | null>(null);
+  const [input, setInput] = useState<string>("");
+  const [searchResult, setSearchResult] = useState<Track[]>([]);
+
+  const search = async (value: string): Promise<void> => {
+    try {
+      const { data } = await axios.get(`/api/getTracks?q=${value}`);
+      data.tracks.items.forEach(
+        (track: { name: string; artists: { name: string }[] }) => {
+          const artistNames = track.artists
+            .map((artist) => artist.name)
+            .join(", ");
+          console.log("Track Name: " + track.name + " by: " + artistNames);
+        }
+      );
+      //console.log("Data: " + JSON.stringify(data.tracks.items[0].name));
+    } catch (err) {}
+  };
 
   useEffect(() => {
-    axios
-      .get("/api/getArtists")
-      .then((response) => {
-        console.log("Response: " + JSON.stringify(response.data.name));
-        //setArtist(response.data);
-      })
-      .catch((err) => {
-        console.log("Error: ", err);
-      });
+    search("beautiful");
   }, []);
 
   //if (!artist) return <div>Failed to get data...</div>;
